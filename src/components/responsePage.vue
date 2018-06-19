@@ -32,7 +32,7 @@ export default {
             if(this.textarea === ""){
                 return;
             }else{
-                this.$emit('sendMsg',this.textarea)
+                this.$emit('responseMsg',this.textarea)
                 this.textarea = ""
             }
             

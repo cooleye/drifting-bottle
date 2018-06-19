@@ -4,11 +4,11 @@
             
             <div class="panel">
                 <div class="panel-header">
-                    <h3>来自：<span>0147nvklkjhb35432ggvbbj3454</span></h3>
+                    <span style="font-weight:800">来自：</span><span>{{bottleDate.author}}</span>
                 </div>
                 <div class="content">
                     <p>
-                        小哥哥，网恋吗？
+                        {{bottleDate.message}}
                     </p>
                 </div>
                 
@@ -23,13 +23,18 @@
 
 <script>
 export default {
-
+props:['bottle'],
+computed:{
+    bottleDate(){
+        return this.bottle;
+    }
+},
 methods:{
     throwHandle(){
         this.$emit('throwIntoSea')
     },
     responseHandle(){
-        this.$emit('responseBottle')
+        this.$emit('responseBottle');
     }
 
 }
@@ -63,18 +68,18 @@ methods:{
     border-radius: 5px;
     margin: 0 auto;
     padding: 0.25rem;
-    overflow: scroll;
+    overflow: hidden;;
     position:relative;
 }
 .picked-container .panel .content{
     width: 100%;
-    height: 8rem;
+    height: 8.7rem;
     margin-bottom: 5px;
     overflow:scroll;
     margin-bottom: 10px;
     /* background: #eee; */
     border-radius: 5px;
-    margin-top: 50px;
+    margin-top: 53px;
     text-align: left;
     font-size: 0.5rem
 }
@@ -87,7 +92,11 @@ methods:{
     height: 45px;
     background: #fff;
     border-bottom: solid 1px #eee;
-    line-height: 45px;
+    line-height: 25px;
+    text-align: center;
+    font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 

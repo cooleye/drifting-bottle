@@ -1,20 +1,17 @@
 "use strict";
 
-/**
- * 
- * @param {*} text 
- * 保存瓶子数据
- */
 var BottleItem = function(text) {
 	if (text) {
 		var obj = JSON.parse(text);
         this.id = obj.id;     
         this.author = obj.author;
         this.time = obj.time;
+        this.message += obj.message;
 	} else {
 	    this.id = "";
 	    this.author = "";
         this.time = "";
+        this.message = ""
 	}
 };
 BottleItem.prototype = {
@@ -23,12 +20,6 @@ BottleItem.prototype = {
 	}
 };
 
-/**
- * 
- * @param {*} text 
- * 保存信息数据
- * 信息数据中寸有瓶子id作为外键，可以根据瓶子id找到所有的信息
- */
 var MessageItem = function(text){
     if(text){
         var obj = JSON.parse(text);
@@ -40,22 +31,20 @@ var MessageItem = function(text){
     }else{
         this.id = "";
         this.author = "";
-        this.time = obj.time;
-        this.value = obj.value;
-        this.bottleId = obj.bottleId;
+        this.time = "";
+        this.value = "";
+        this.bottleId = "";
     }
 };
+
 MessageItem.prototype = {
     toString: function () {
 		return JSON.stringify(this);
 	}
 }
 
-
-
-
 var DriftingBottle = function () {
-    //用来存储瓶子
+  
     LocalContractStorage.defineMapProperty(this, "bottles", {
         parse: function (text) {
             return new BottleItem(text);
@@ -65,10 +54,9 @@ var DriftingBottle = function () {
         }
     });
     
-    //保存瓶子的id
-    LocalContractStorage.defineProperty(this,"bottleIdMap");
+   
+    LocalContractStorage.defineMapProperty(this,"bottleIdMap");
     
-    //瓶子的数量
     LocalContractStorage.defineProperty(this, "size");
     
     LocalContractStorage.defineMapProperty(this,"messages",{
@@ -83,27 +71,14 @@ var DriftingBottle = function () {
 };
 
 
-/**
- * 随机字符串
- * 
- * (Number(Math.random().toString().substr(2) + Date.now())/7).toString(36).slice(0,12)
- */
 DriftingBottle.prototype = {
-    init: function () {
-        // todo
+    init() {
         this.size = 0;
     },
 
-    /**
-     * 
-     * @param {*} message
-     * 扔一个新瓶子 
-     */
-    sendBottle ( message) {
+    sendBottle ( message ) {
 
-        console.log('>>>>contract<<<<',message);
         var index = this.size;
-       
 
         message = message.trim();
         if ( message === ""){
@@ -115,58 +90,58 @@ DriftingBottle.prototype = {
 
         var from = Blockchain.transaction.from;
 
+        //save bottle
         var bottleItem = new BottleItem();
         bottleItem.author = from;
         var bottleId = (Number(Math.random().toString().substr(2) + Date.now())/7).toString(36).slice(0,12);
         bottleItem.id = bottleId;
         var time = new Date().getTime();
         bottleItem.time = time;
+        bottleItem.message = message;
 
-        this.bottles.put(bottleId, bottleItem);
+        this.bottles.set(bottleId, bottleItem);
         this.bottleIdMap.set(index, bottleId);
         this.size +=1;
 
 
-
-        var messageItem = new MessageItem();
-        messageItem.author = from;
-        var msgId = (Number(Math.random().toString().substr(2) + Date.now())/7).toString(36).slice(0,12);
-        messageItem.id = msgId;
-        messageItem.time = time;
-        messageItem.value = message;
-        messageItem.bottleId = bottleId;
-        this.messages.put(msgId,messageItem);
-
+        //save message
+        // var messageItem = new MessageItem();
+        // messageItem.author = from;
+        // var msgId = (Number(Math.random().toString().substr(2) + Date.now())/7).toString(36).slice(0,12);
+        // messageItem.id = msgId;
+        // messageItem.time = time;
+        // messageItem.value = message;
+        // messageItem.bottleId = bottleId;
+        // this.messages.put(msgId,messageItem);
     },
-    /**
-     * 
-     * @param {*} message 
-     * @param {*} bottleId 
-     * 响应漂流瓶
-     */
+  
     responseBottle(message,bottleId){
-        var messageItem = new MessageItem();
-        var from = Blockchain.transaction.from;
-        messageItem.author = from;
-        var msgId = (Number(Math.random().toString().substr(2) + Date.now())/7).toString(36).slice(0,12);
-        messageItem.id = msgId;
-        messageItem.time = time;
-        messageItem.value = message;
-        messageItem.bottleId = bottleId;
-        this.messages.put(msgId,messageItem);
+        // var messageItem = new MessageItem();
+        // var from = Blockchain.transaction.from;
+        // messageItem.author = from;
+        // var msgId = (Number(Math.random().toString().substr(2) + Date.now())/7).toString(36).slice(0,12);
+        // messageItem.id = msgId;
+        // messageItem.time = time;
+        // messageItem.value = message;
+        // messageItem.bottleId = bottleId;
+        // this.messages.put(msgId,messageItem);
+        var bottle = this.bottles.get(bottleId);
+        bottle = JSON.parse(bottle);
+        bottle.message = bottle.message + "%_%" + message;
+        this.bottles.set(bottleId,bottle);
+
     },
-    len:function(){
+    len(){
         return this.size;
     },
-    pickBottle:function(){
+    pickBottle(){
         var randomIndex = Math.floor(Math.random() * this.size);
         var bottleId = this.bottleIdMap.get(randomIndex);
         var bottle = this.bottles.get(bottleId);
-
-        var message = this.messages.get(bottle.id);
+        var len = this.len();
         return {
-            bottle: bottle,
-            message: message
+            bottle:bottle,
+            size:len
         }
     }
 };

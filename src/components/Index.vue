@@ -1,12 +1,16 @@
 <template>
     <div class="container">
+        
+        <Loading      v-show="loading"/>
+
         <footer>
             <div><el-button round type="success" @click="pickBottle">捡一个瓶子</el-button></div>
             <div><el-button round type="danger" @click="throwBottle">扔一个瓶子</el-button></div>
         </footer>
 
-    <PickedBottle  v-show="showPickedBottle" @throwIntoSea="throwHandle"  @responseBottle="responseHandle"/>
+    <PickedBottle  :bottle="bottle"  v-show="showPickedBottle" @throwIntoSea="throwHandle"  @responseBottle="responseHandle"/>
     <SendBottle v-show="showSendBottle" @sendMsg="sendMsg" @cancelMsg="cancelMsg"/>
+    <ResponsePage v-show="showResponsePage"  @responseMsg="responseMsg"/>
     </div>
 </template>
 
@@ -14,25 +18,33 @@
 
 import PickedBottle from '@/components/PickedBottle';
 import SendBottle from '@/components/SendBottle';
-
+import ResponsePage from '@/components/responsePage';
+import Loading from '@/components/loading';
 import store from '@/store';
 
 export default {
     data(){
         return{
             showPickedBottle:false,
-            showSendBottle:false
+            showSendBottle:false,
+            showResponsePage:false,
+            bottle:{},
+            loading:false
         }
     },
     name:"Index",
-    components:{PickedBottle,SendBottle},
-    mounted(){
-        store.add();
-    },
+    components:{PickedBottle,SendBottle,Loading,ResponsePage},
     methods:{
         pickBottle(){
-            console.log('捡瓶子。。。。')
-            this.showPickedBottle = true;
+            
+            this.loading = true;
+           
+            store.pickBottle( res =>{
+                var json = JSON.parse(res);
+                this.bottle = json.bottle;
+                this.showPickedBottle = true;
+                this.loading = false;
+            });
         },
         throwBottle(){
             console.log('扔瓶子......')
@@ -43,15 +55,23 @@ export default {
             this.showPickedBottle = false;
         },
         responseHandle(){
-            console.log("响应他》。。。。。")
+            console.log("回应他。。。。。")
             this.showPickedBottle = false;
-            this.showSendBottle = true;
+            this.showResponsePage = true;
         },
-        sendMsg(){
+        responseMsg(msg){
+           this.showResponsePage = false;
+           var bottleId = this.bottle.id;
+           store.responseMsg(msg,bottleId)
+        },
+        sendMsg(msg){
             this.showSendBottle = false;
+            console.log('msg:',msg)
+            store.sendMsg(msg);
         },
         cancelMsg(){
             this.showSendBottle = false;
+            this.showResponsePage = false;
         }   
 
 
@@ -84,4 +104,5 @@ footer{
 footer div{
     flex: 1;
 }
+
 </style>
