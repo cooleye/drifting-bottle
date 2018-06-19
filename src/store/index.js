@@ -7,14 +7,14 @@ var Account = nebulas.Account,
 neb = new nebulas.Neb();
 neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
-//n1oPkbSo8GgrCtKNKgJZR3vBDSzuDMSLGnk
+
 /**
- * hash: 98dbf851f9c03bca743c9d0a8911ecddc209ff061cc835ba054113b1b031de50
- * address: n1y1KeKXDofCdvRP1tNF8F4u1Wm1DEfiayv
+ * hash: 833efaf21b1eadfb94640dc474b911bfa01b4f9249782bc967893af19431e87f
+ * address: n1jKBgfj1ptd5xQEKWaTFG2zbX7q13AUN2L
  * 
  * passphrase
  */
-var dappAddress = 'n1y1KeKXDofCdvRP1tNF8F4u1Wm1DEfiayv';
+var dappAddress = 'n1oq6WQJp8DgCTydhWJPVhMHaDPmKyUa5Ks';
 
 // var callbackUrl = NebPay.config.mainnetUrl;   //如果合约在主网,则使用这个
 var callbackUrl = NebPay.config.testnetUrl;  
@@ -101,9 +101,11 @@ function responseMsg(msg,bottleId){
 }
 
 function  cbSearch(resp,callback){
-    // var result = resp.result  
-    console.log("查询返回结果: " + resp)
-    // callback(resp.result)
+    var result = resp.result;
+    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
+    console.log(result)
+    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
+    callback(resp.result)
 }
 var intervalQuery
 

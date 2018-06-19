@@ -7,9 +7,14 @@
                     <span style="font-weight:800">来自：</span><span>{{bottleDate.author}}</span>
                 </div>
                 <div class="content">
-                    <p>
-                        {{bottleDate.message}}
-                    </p>
+                    
+                    <div v-for="(item,index) in messages" :key="index">
+                            <div class="msg-item">
+                                <div class="msg-addr">{{item.from}}说：</div>
+                                <div class="msg-cont">{{item.msg}}</div>
+                            </div>
+                    </div>
+                 
                 </div>
                 
             </div>
@@ -27,8 +32,21 @@ props:['bottle'],
 computed:{
     bottleDate(){
         return this.bottle;
+    },
+    messages(){
+        var messages = this.bottle.message;
+        var msgArr = messages.split("%startid%");
+        var newArr = [];
+        for(var i = 1;i < msgArr.length;i++){
+            var marr = msgArr[i].split("%startmsg%");
+            var mobj = {from:marr[0],msg:marr[1]};
+            newArr.push(mobj);
+        }
+
+        return newArr;
     }
 },
+
 methods:{
     throwHandle(){
         this.$emit('throwIntoSea')
@@ -81,7 +99,7 @@ methods:{
     border-radius: 5px;
     margin-top: 53px;
     text-align: left;
-    font-size: 0.5rem
+    /* font-size: 0.5rem */
 }
 
 
@@ -108,5 +126,23 @@ methods:{
 
 .picked-footer div{
     flex:1;
+}
+
+.msg-item{
+    border-bottom: solid 1px #eee;
+    margin-top: 0.5rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.msg-item .msg-addr{
+    font-size: 12px;
+    color: #999;
+}
+
+.msg-item .msg-cont{
+    font-size: 16px;
+    color: #000;
+    margin-top: 3px;
 }
 </style>

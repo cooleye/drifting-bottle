@@ -38,7 +38,7 @@ export default {
             
         },
         cancel(){
-            this.$emit('cancelMsg')
+            this.$emit('cancelRes')
             this.textarea = ""
         }
     }

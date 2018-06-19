@@ -10,7 +10,7 @@
 
     <PickedBottle  :bottle="bottle"  v-show="showPickedBottle" @throwIntoSea="throwHandle"  @responseBottle="responseHandle"/>
     <SendBottle v-show="showSendBottle" @sendMsg="sendMsg" @cancelMsg="cancelMsg"/>
-    <ResponsePage v-show="showResponsePage"  @responseMsg="responseMsg"/>
+    <ResponsePage v-show="showResponsePage"  @responseMsg="responseMsg"  @cancelRes="cancelRes"/>
     </div>
 </template>
 
@@ -42,8 +42,15 @@ export default {
             store.pickBottle( res =>{
                 var json = JSON.parse(res);
                 this.bottle = json.bottle;
-                this.showPickedBottle = true;
-                this.loading = false;
+
+                if(this.bottle == null || json.size <=0){
+                    console.log('海里还没有瓶子,,,,,,,')
+                    this.loading = false;
+                }else{
+                    this.showPickedBottle = true;
+                    this.loading = false;
+                }
+                
             });
         },
         throwBottle(){
@@ -61,16 +68,25 @@ export default {
         },
         responseMsg(msg){
            this.showResponsePage = false;
-           var bottleId = this.bottle.id;
-           store.responseMsg(msg,bottleId)
+           if(msg){
+               var bottleId = this.bottle.id;
+               store.responseMsg(msg,bottleId)
+           }
+           
         },
         sendMsg(msg){
             this.showSendBottle = false;
             console.log('msg:',msg)
-            store.sendMsg(msg);
+            if(msg){
+                store.sendMsg(msg);
+            }
+            
         },
         cancelMsg(){
             this.showSendBottle = false;
+            this.showResponsePage = false;
+        },
+        cancelRes(){
             this.showResponsePage = false;
         }   
 

@@ -66,7 +66,7 @@ DriftingBottle.prototype = {
         bottleItem.id = bottleId;
         var time = new Date().getTime();
         bottleItem.time = time;
-        bottleItem.message = message;
+        bottleItem.message = "%startid%" + from + '%startmsg%' + message;
 
         this.bottles.set(bottleId, bottleItem);
         this.bottleIdMap.set(index, bottleId);
@@ -76,8 +76,9 @@ DriftingBottle.prototype = {
     responseBottle(message,bottleId){
         message = message.trim();
         var bottle = this.bottles.get(bottleId);
-        bottle = JSON.parse(bottle);
-        bottle.message = bottle.message + "*|_|_|*" + message;
+        var from = Blockchain.transaction.from.toString();
+        bottle.message  += "%startid%" + from + '%startmsg%' + message;
+
         this.bottles.set(bottleId,JSON.stringify(bottle));
 
     },
