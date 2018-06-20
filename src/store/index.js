@@ -8,6 +8,31 @@ neb = new nebulas.Neb();
 neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
 
+var Storage = {
+    save(k,v){
+        if(window.localStorage.getItem(k)){
+            var str = window.localStorage.getItem(k)
+            var json = JSON.parse(str);
+            for(var i = 0;i < json.length;i++){
+                if(json[i] == v){
+                    return;
+                }else{
+                    json.push(v);
+                }
+            }
+            
+            window.localStorage.setItem(k,JSON.stringify(json));
+        }else{
+            var arr = [];
+            arr.push(v);
+            window.localStorage.setItem(k,JSON.stringify(arr));
+        }  
+    },
+    get(k){
+        return JSON.parse(window.localStorage.getItem(k));
+    }
+}
+
 /**
  * hash: 833efaf21b1eadfb94640dc474b911bfa01b4f9249782bc967893af19431e87f
  * address: n1jKBgfj1ptd5xQEKWaTFG2zbX7q13AUN2L
@@ -52,7 +77,7 @@ function sendMsg(msg){
  * @param {*} callback 
  * 捡到一个瓶子
  */
-function pickBottle(callback){
+function pickBottle(callback,bottleId){
    
     var from = Account.NewAccount().getAddressString();
 
@@ -61,7 +86,7 @@ function pickBottle(callback){
     var gas_price = "1000000"
     var gas_limit = "2000000"
     var callFunction = "pickBottle";
-    var callArgs = JSON.stringify([]);  //推荐用 JSON.stringify 来生成参数字符串,这样会避免出错!
+    var callArgs = JSON.stringify([bottleId]);  //推荐用 JSON.stringify 来生成参数字符串,这样会避免出错!
     var contract = {
         "function": callFunction,
         "args": callArgs
@@ -95,6 +120,9 @@ function responseMsg(msg,bottleId){
         callback: callbackUrl
     });
 
+
+    Storage.save("bottles",bottleId);
+
     intervalQuery = setInterval(function () {
         funcIntervalQuery();
     }, 10000);
@@ -102,10 +130,13 @@ function responseMsg(msg,bottleId){
 
 function  cbSearch(resp,callback){
     var result = resp.result;
-    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
-    console.log(result)
-    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
-    callback(resp.result)
+    var json = JSON.parse(result);
+    // console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
+    // console.log(result)
+    //保存在localStorage
+    // console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
+    callback(json)
+    
 }
 var intervalQuery
 
@@ -129,7 +160,7 @@ function funcIntervalQuery() {
 
 
 function cbPush(resp) {
-    console.log(">>>>>>>>>> response of push: " + JSON.stringify(resp))
+    console.log(">>>>>>>>>> send of push: " + JSON.stringify(resp))
     var respString = JSON.stringify(resp);
     if(respString.search("rejected by user") !== -1){
         clearInterval(intervalQuery)
@@ -140,8 +171,14 @@ function cbPush(resp) {
 }
 
 
+function getBottleFromStorage(k){
+    return Storage.get(k);
+}
+
+
 export default{
     sendMsg,
     pickBottle,
-    responseMsg
+    responseMsg,
+    getBottleFromStorage
 }

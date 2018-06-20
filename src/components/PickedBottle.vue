@@ -1,4 +1,5 @@
 <template>
+    <transition name="fade">
     <div class="picked-container">
        <div class="cover">
             
@@ -10,7 +11,11 @@
                     
                     <div v-for="(item,index) in messages" :key="index">
                             <div class="msg-item">
-                                <div class="msg-addr">{{item.from}}说：</div>
+                                
+                                <div class="msg-addr">
+                                    <div><img :src="item.imgUrl" alt=""></div>
+                                    <div>{{item.from}}</div>
+                                </div>
                                 <div class="msg-cont">{{item.msg}}</div>
                             </div>
                     </div>
@@ -19,14 +24,19 @@
                 
             </div>
             <div class="picked-footer">
-                <div><el-button type="primary" round @click="throwHandle">扔回海里</el-button></div>
+                <div><el-button type="danger" round @click="throwHandle">扔回海里</el-button></div>
                 <div><el-button type="primary" round @click="responseHandle">回应他/她</el-button></div>
             </div>
        </div>
     </div>
+    </transition>
 </template>
 
 <script>
+
+import Identicon from 'identicon.js';
+import crypto from 'crypto';
+
 export default {
 props:['bottle'],
 computed:{
@@ -39,7 +49,17 @@ computed:{
         var newArr = [];
         for(var i = 1;i < msgArr.length;i++){
             var marr = msgArr[i].split("%startmsg%");
-            var mobj = {from:marr[0],msg:marr[1]};
+
+            let hash = crypto.createHash('md5')
+            hash.update(marr[0]); // 传入用户名
+            let imgData = new Identicon(hash.digest('hex')).toString()
+            var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
+            var mobj = {
+                    from:marr[0],
+                    msg:marr[1],
+                    imgUrl:imgUrl
+                };
+            
             newArr.push(mobj);
         }
 
@@ -130,19 +150,36 @@ methods:{
 
 .msg-item{
     border-bottom: solid 1px #eee;
-    margin-top: 0.5rem;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.msg-item img{
+    width: 30px;height: 30px;
+    /* border-radius: 15px; */
 }
 
 .msg-item .msg-addr{
     font-size: 12px;
     color: #999;
+    overflow: hidden;
+    line-height: 30px;
 }
+.msg-item .msg-addr div{
+    float: left;
+}
+
 
 .msg-item .msg-cont{
     font-size: 16px;
     color: #000;
     margin-top: 3px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

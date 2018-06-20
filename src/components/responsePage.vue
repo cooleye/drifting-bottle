@@ -1,10 +1,14 @@
 <template>
+<transition name="fade">
     <div class="send-container">
+         
+  
         <div class="cover">
             <el-input
             type="textarea"
-            :rows="5"
+            :rows="6"
             placeholder="请输入内容"
+            style="font-size:16px;"
             v-model="textarea">
             </el-input>
             <div>
@@ -12,12 +16,11 @@
             </div>
             <div>
                 <el-button  round type="danger" style="width:100%;margin-top:10px;" @click="cancel">取 消</el-button>
-            </div>
-            
-            
+            </div>      
         </div>
-
+    
     </div>
+    </transition>
 </template>
 
 <script>
@@ -51,17 +54,26 @@ export default {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
-    position: absolute;
+    position: relative;
     left: 0;
     top: 0;
     z-index: 100;
 }
 
 .send-container .cover{
+
     width: 8rem;
-    margin: 1rem auto;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -4rem;
+    margin-top: -4.5rem;
 }
-textarea{
-    font-size: 0.5rem;
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

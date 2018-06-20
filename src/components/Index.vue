@@ -1,11 +1,18 @@
 <template>
     <div class="container">
         
-        <Loading      v-show="loading"/>
+        <!-- <div class="audio" ref="audio">
+            <audio src="/static/pick.mp3" ref="pick"></audio>
+            <audio src="/static/throw.mp3" ref="throw"></audio>
+        </div> -->
+
+
+        <Loading    v-show="loading"/>
 
         <footer>
-            <div><el-button round type="success" @click="pickBottle">捡一个瓶子</el-button></div>
-            <div><el-button round type="danger" @click="throwBottle">扔一个瓶子</el-button></div>
+            <div class="f1"><el-button round type="success" @click="pickBottle">捡一个瓶子</el-button></div>
+             <div class="f2"><el-button type="primary" icon="iconfont icon-wode" circle  @click="tomine" ></el-button></div>
+            <div class="f1"><el-button round type="danger" @click="throwBottle">扔一个瓶子</el-button></div>
         </footer>
 
     <PickedBottle  :bottle="bottle"  v-show="showPickedBottle" @throwIntoSea="throwHandle"  @responseBottle="responseHandle"/>
@@ -40,10 +47,10 @@ export default {
             this.loading = true;
            
             store.pickBottle( res =>{
-                var json = JSON.parse(res);
-                this.bottle = json.bottle;
+                // var json = JSON.parse(res);
+                this.bottle = res.bottle;
 
-                if(this.bottle == null || json.size <=0){
+                if(this.bottle == null || res.size <=0){
                     console.log('海里还没有瓶子,,,,,,,')
                     this.loading = false;
                 }else{
@@ -54,8 +61,9 @@ export default {
             });
         },
         throwBottle(){
-            console.log('扔瓶子......')
+            // console.log('扔瓶子......',this.$refs.audio.style.color="red")
             this.showSendBottle = true;
+            // console.log(this.$refs.throw)
         },
         throwHandle(){
             console.log('扔回海里。。。。')
@@ -88,6 +96,9 @@ export default {
         },
         cancelRes(){
             this.showResponsePage = false;
+        },
+        tomine(){
+            this.$router.push("/mine");
         }   
 
 
@@ -112,13 +123,16 @@ footer{
     background: #333;
     width: 100%;
     display: flex;
-    padding:5px 0px;
+    padding:8px 0px;
     text-align: center;
     width:10rem;
 }
 
-footer div{
-    flex: 1;
+footer .f1{
+    flex: 2;
 }
 
+fonter .f2{
+    flex: 1;
+}
 </style>

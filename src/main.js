@@ -14,6 +14,8 @@ Vue.config.productionTip = false
 import 'reset-css';
 import './assets/common.css';
 import './assets/setrem';
+import './assets/font/iconfont.css';
+import './assets/font/iconfont.js';
 
 
 /* eslint-disable no-new */

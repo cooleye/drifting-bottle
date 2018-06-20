@@ -10,7 +10,9 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "crypto": "^1.0.1",
     "element-ui": "^2.4.1",
+    "identicon.js": "^2.3.2",
     "nebpay.js": "^0.2.0",
     "nebulas": "^0.5.2",
     "reset-css": "^4.0.1",
