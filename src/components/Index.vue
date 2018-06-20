@@ -155,7 +155,7 @@ export default {
     width: 10rem;
     min-width: 320px;
     height: 100%;
-    background: url(../assets/st.png) no-repeat #f3d889;
+    background: url(../assets/stbg.png) no-repeat #f3d889;
     background-size: 100% auto;
     position: relative;
     overflow: hidden;

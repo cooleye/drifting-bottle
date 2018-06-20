@@ -60,7 +60,6 @@ export default {
     min-width: 320px;
     height: 100%;
     background-color: #fff;
-    /* background: url(../assets/st.png) no-repeat #f3d889; */
     background-size: 100% auto;
     position: fixed;
     overflow: scroll
