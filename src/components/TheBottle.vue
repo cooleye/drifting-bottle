@@ -2,7 +2,7 @@
     <div class="container">
          <Loading v-show="loading"/>
          <header>
-            <el-button   type="text" size="small" round icon="el-icon-arrow-left" @click="back">返回</el-button>   <span>我的瓶子</span>
+            <el-button   type="text" size="small" round icon="el-icon-arrow-left" @click="back">返回</el-button>   <span>来自：{{bottleDate.author | ellipsisAddr}}</span>
         </header>
 
         <div class="content">
@@ -16,7 +16,7 @@
                             <div style="margin-left:5px;">{{item.from}}</div>
                             <div style="float:right">{{index+1}}楼</div>
                         </div>
-                        <div class="msg-cont">{{item.msg}}</div>
+                        <div class="msg-cont">{{item.value}}</div>
                     </div>
             </div>
             </div>
@@ -50,7 +50,7 @@ export default {
         }
     },
     components:{Loading,ResponsePage},
-    created(){
+    mounted(){
         this.loading = true;
         let bid = this.$route.query.bid;
         store.pickBottle(res =>{
@@ -64,28 +64,33 @@ export default {
             return this.bottle;
         },
         messages(){
-            var messages = this.bottle.message;
-            if(messages){
-                var msgArr = messages.split("%startid%");
-                var newArr = [];
-                console.log('newArr:::::::',newArr)
-                for(var i = 1;i < msgArr.length;i++){
-                    var marr = msgArr[i].split("%startmsg%");
+           if(this.bottleDate && this.bottleDate.message){
+                var messages = this.bottleDate.message;
+                var msgArr = JSON.parse(messages);
 
-                    let hash = crypto.createHash('md5')
-                    hash.update(marr[0]); // 传入用户名
-                    let imgData = new Identicon(hash.digest('hex')).toString()
-                    var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
-                    var mobj = {
-                            from:marr[0],
-                            msg:marr[1],
-                            imgUrl:imgUrl
-                        };
-                    
-                    newArr.push(mobj);
+                if( typeof msgArr == 'object' && msgArr instanceof Array){
+                    for(var i = 0;i < msgArr.length;i++){
+                        let hash = crypto.createHash('md5')
+                        hash.update(msgArr[i].from); // 传入用户名
+                        let imgData = new Identicon(hash.digest('hex')).toString()
+                        var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
+                        msgArr[i].imgUrl = imgUrl;
+                    }
+                    return msgArr;
                 }
+            }
+        }
+    },
+    filters:{
+        ellipsisAddr(char){
 
-                return newArr;
+            if(char){
+                var start = char.slice(0,5);
+                var end = char.slice(char.length-6,-1);
+                var str = start + '....' + end;
+                return str;
+            }else{
+                return char;
             }
             
         }
@@ -101,7 +106,6 @@ export default {
             })
         },
          responseMsg(msg){
-           console.log('response---------------')
            this.showResponsePage = false;
            if(msg){
                var bottleId = this.bottle.id;
@@ -111,6 +115,10 @@ export default {
         },
         cancelRes(){
             this.showResponsePage = false;
+        },
+        responseHandle(){
+            console.log('回应。。。。。')
+            this.showResponsePage = true;
         }
     }
 }
@@ -120,6 +128,7 @@ export default {
 
 .container{
     position: relative;
+    background-color: #eee;
 }
 
 header{
@@ -140,14 +149,19 @@ header button{
     position: absolute;
     left: 5px;
     top: 5px;
+    text-align: center;
 }
 
+header>span{
+    font-size: 16px;
+}
 .content{
     width: 100%;
     /* padding: 10px; */
     overflow-x: hidden;
     overflow-y: scroll;
     margin-top: 45px;
+    margin-bottom: 50px;
     background-color: #fff;
     /* position: fixed; */
 }
@@ -174,7 +188,7 @@ header button{
 }
 
 .msg-item:hover{
-    background-color: #eee;
+    background-color: #f0faff;
 }
 
 .msg-item img{

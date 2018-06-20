@@ -105,7 +105,7 @@ header button{
     font-size: 18px;
     border-radius: 5px;
     border-bottom: solid 1px #eee;
-    color: #999;
+    color: #555;
 }
 
 
@@ -126,6 +126,6 @@ button:hover{
     color:deepskyblue;
 }
 .bottle-list .bottle-item:hover{
-    background-color: #eee;
+    background-color: #f0faff;
 }
 </style>

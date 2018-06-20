@@ -10,12 +10,12 @@ neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
 
 /**
- * hash: 5dbf86ee1bcf19f8cf54503e319cd7b9f8836ce6a152a4044e15bf204d079bab
- * address: n1ooC5D5FFWxJBGMZ27DxcgRstV3DE9y6ri
+ * hash: fc92369a3c064813d7f51a872ece779656248041f8a9ca8ae6a957569d4dc6d3
+ * address: n21KyfrdveH2tnS4KoLz4hs8tqzwJ8vmtVT
  * 
  * passphrase
  */
-var dappAddress = 'n1ooC5D5FFWxJBGMZ27DxcgRstV3DE9y6ri';
+var dappAddress = 'n21KyfrdveH2tnS4KoLz4hs8tqzwJ8vmtVT';
 
 // var callbackUrl = NebPay.config.mainnetUrl;   //如果合约在主网,则使用这个
 var callbackUrl = NebPay.config.testnetUrl;  
@@ -107,10 +107,10 @@ function responseMsg(msg,bottleId){
 function  cbSearch(resp,callback){
     var result = resp.result;
     var json = JSON.parse(result);
-    // console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
-    // console.log(result)
+    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
+    console.log(result)
     //保存在localStorage
-    // console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
+    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
     callback(json)
     
 }

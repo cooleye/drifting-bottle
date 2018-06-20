@@ -6,6 +6,9 @@
             <audio src="/static/throw.mp3" ref="throw"></audio>
         </div>
 
+        <!-- 微信端提示 -->
+        <div class="wxwarning" v-if="wxwarning"></div>
+
         <div class="tip" v-show="tip.show">
             {{tip.value}}
         </div>
@@ -47,43 +50,51 @@ export default {
                 show:false,
                 time:0
             },
-            tipTimer:null
+            tipTimer:null,
+            wxwarning:false
         }
     },
     name:"Index",
     components:{PickedBottle,SendBottle,Loading,ResponsePage},
     mounted(){
-        console.log(this.$refs.audio)
+        // console.log(this.$refs.audio)
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+　　　　    //微信走这个
+            this.wxwarning = true;
+　　　　  }else{
+　　　　    //其他环境走这个
+            this.wxwarning = false;
+　　　　 }
     },
     watch:{
-            tipTimer(){
-                console.log(this.tipTimer)
-                if(this.tipTimer){
-                    if(this.tip.time >=1){
-                        this.tip.show = true;
-                        clearInterval(this.tipTimer)
-                        setTimeout( ()=>{
-                            this.tip.show = false;
-                        },2000)
-                        this.tip.time = 0;
-                    }
-                }
+            // tipTimer(){
+            //     console.log(this.tipTimer)
+            //     if(this.tipTimer){
+            //         if(this.tip.time >=1){
+            //             this.tip.show = true;
+            //             clearInterval(this.tipTimer)
+            //             setTimeout( ()=>{
+            //                 this.tip.show = false;
+            //             },2000)
+            //             this.tip.time = 0;
+            //         }
+            //     }
                 
-            }
+            // }
         },
     methods:{
         pickBottle(){
             
             this.loading = true;
 
-            this.tipTimer = setInterval( ()=>{
-                                this.time++
-                            },1000)
+            // this.tipTimer = setInterval( ()=>{
+            //                     this.time++
+            //                 },1000)
            
 
             store.pickBottle( res =>{
                 this.bottle = res.bottle;
-
                 if(this.bottle == null || res.size <=0){
                     console.log('海里还没有瓶子,,,,,,,')
                     this.loading = false;
@@ -95,9 +106,7 @@ export default {
         },
         
         throwBottle(){
-            // console.log('扔瓶子......',this.$refs.audio.style.color="red")
             this.showSendBottle = true;
-            // console.log(this.$refs.throw)
         },
         throwHandle(){
             console.log('扔回海里。。。。')
@@ -178,5 +187,17 @@ footer .f2 button{
 .tip{
     margin-top: 10rem;
     font-size: 24px;
+}
+
+.wxwarning{
+    width: 100%;
+    height: 100%;
+    /* background-color: rgba(0, 0, 0, 0.75); */
+    background: url(../assets/tip.png) no-repeat rgba(0, 0, 0, 0.75);
+    background-size: 100%;
+    text-align:center;
+    z-index: 9999999;
+    position: absolute;
+    color: #fff;
 }
 </style>

@@ -2,6 +2,9 @@
 <transition name="fade">
     <div class="send-container">
         <div class="cover">
+            <div v-show="warning" class="warning">
+                漂流瓶内容不能超过256个字哦😜
+            </div>
             <el-input
             type="textarea"
             :rows="6"
@@ -25,13 +28,16 @@
 export default {
     data(){
         return{
-            textarea:""
+            textarea:"",
+            warning:false
         }
     },
     methods:{
         send(){
             if(this.textarea === ""){
                 return;
+            }else if(this.textarea.length >256){
+                this.warning = true;
             }else{
                 this.$emit('sendMsg',this.textarea)
                 this.textarea = ""
@@ -42,6 +48,15 @@ export default {
             this.$emit('cancelMsg')
             this.textarea = ""
         }
+    },
+    watch:{
+        textarea(){
+            if(this.textarea.length <= 256){
+                this.warning = false;
+            }else{
+                this.warning = true;
+            }
+        }
     }
 }
 </script>
@@ -49,7 +64,7 @@ export default {
 <style scoped>
 
 .send-container{
-    width: 100%;
+    width: 10rem;
     height: 100%;
     background: rgba(0, 0, 0, 0.75);
     position: absolute;
@@ -67,6 +82,12 @@ export default {
     top: 50%;
     margin-left: -4rem;
     margin-top: -4.5rem;
+}
+
+.warning{
+    text-align: center;
+    color: #fff;
+    margin-bottom: 10px;
 }
 
 .fade-enter-active, .fade-leave-active {

@@ -7,7 +7,7 @@
                 <div class="panel-header">
                     <span style="font-weight:800">来自：</span><span>{{bottleDate.author}}</span>
                 </div>
-                <div class="content">
+                <div class="content"  v-if="messages">
                     
                     <div v-for="(item,index) in messages" :key="index">
                             <div class="msg-item">
@@ -16,7 +16,7 @@
                                     <div><img :src="item.imgUrl" alt=""></div>
                                     <div>{{item.from}}</div>
                                 </div>
-                                <div class="msg-cont">{{item.msg}}</div>
+                                <div class="msg-cont">{{item.value}}</div>
                             </div>
                     </div>
                  
@@ -44,29 +44,25 @@ computed:{
         return this.bottle;
     },
     messages(){
-        var messages = this.bottle.message;
-        var msgArr = messages.split("%startid%");
-        var newArr = [];
-        for(var i = 1;i < msgArr.length;i++){
-            var marr = msgArr[i].split("%startmsg%");
 
-            let hash = crypto.createHash('md5')
-            hash.update(marr[0]); // 传入用户名
-            let imgData = new Identicon(hash.digest('hex')).toString()
-            var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
-            var mobj = {
-                    from:marr[0],
-                    msg:marr[1],
-                    imgUrl:imgUrl
-                };
-            
-            newArr.push(mobj);
+        if(this.bottleDate && this.bottleDate.message){
+            var messages = this.bottleDate.message;
+            var msgArr = JSON.parse(messages);
+
+            if( typeof msgArr == 'object' && msgArr instanceof Array){
+                for(var i = 0;i < msgArr.length;i++){
+                    let hash = crypto.createHash('md5')
+                    hash.update(msgArr[i].from); // 传入用户名
+                    let imgData = new Identicon(hash.digest('hex')).toString()
+                    var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
+                    msgArr[i].imgUrl = imgUrl;
+                }
+                return msgArr;
+            }
         }
-
-        return newArr;
+        
     }
 },
-
 methods:{
     throwHandle(){
         this.$emit('throwIntoSea')
