@@ -41,15 +41,12 @@ export default {
 
 <style  scoped>
 .loading-cover{
-    position: relative;
-    left: 0;
-    top: 0;
-    width: 100%;
+    width: 10rem;
     height: 100%;
     z-index: 99999;
     background-color: rgba(0, 0, 0, 0.75);
     text-align: center;
-    position: absolute;
+    position: fixed;
     z-index: 999;
 }
 .loader {

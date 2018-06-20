@@ -1,45 +1,21 @@
 import nebulas from 'nebulas';
 import NebPay from 'nebpay.js';
 
-
+import Storage from './Storage';
 
 var Account = nebulas.Account,
 neb = new nebulas.Neb();
 neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
 
-var Storage = {
-    save(k,v){
-        if(window.localStorage.getItem(k)){
-            var str = window.localStorage.getItem(k)
-            var json = JSON.parse(str);
-            for(var i = 0;i < json.length;i++){
-                if(json[i] == v){
-                    return;
-                }else{
-                    json.push(v);
-                }
-            }
-            
-            window.localStorage.setItem(k,JSON.stringify(json));
-        }else{
-            var arr = [];
-            arr.push(v);
-            window.localStorage.setItem(k,JSON.stringify(arr));
-        }  
-    },
-    get(k){
-        return JSON.parse(window.localStorage.getItem(k));
-    }
-}
 
 /**
- * hash: 833efaf21b1eadfb94640dc474b911bfa01b4f9249782bc967893af19431e87f
- * address: n1jKBgfj1ptd5xQEKWaTFG2zbX7q13AUN2L
+ * hash: 5dbf86ee1bcf19f8cf54503e319cd7b9f8836ce6a152a4044e15bf204d079bab
+ * address: n1ooC5D5FFWxJBGMZ27DxcgRstV3DE9y6ri
  * 
  * passphrase
  */
-var dappAddress = 'n1oq6WQJp8DgCTydhWJPVhMHaDPmKyUa5Ks';
+var dappAddress = 'n1ooC5D5FFWxJBGMZ27DxcgRstV3DE9y6ri';
 
 // var callbackUrl = NebPay.config.mainnetUrl;   //如果合约在主网,则使用这个
 var callbackUrl = NebPay.config.testnetUrl;  
@@ -176,9 +152,14 @@ function getBottleFromStorage(k){
 }
 
 
+function removeBottleFromStorage(k,v){
+    Storage.remove(k,v)
+}
+
 export default{
     sendMsg,
     pickBottle,
     responseMsg,
-    getBottleFromStorage
+    getBottleFromStorage,
+    removeBottleFromStorage
 }

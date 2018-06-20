@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Loading v-show="loading"/>
+         <Loading v-show="loading"/>
          <header>
             <el-button   type="text" size="small" round icon="el-icon-arrow-left" @click="back">返回</el-button>   <span>我的瓶子</span>
         </header>
@@ -14,6 +14,7 @@
                         <div class="msg-addr">
                             <div><img :src="item.imgUrl" alt=""></div>
                             <div style="margin-left:5px;">{{item.from}}</div>
+                            <div style="float:right">{{index+1}}楼</div>
                         </div>
                         <div class="msg-cont">{{item.msg}}</div>
                     </div>
@@ -21,6 +22,9 @@
             </div>
                  
         </div>
+
+
+        <ResponsePage v-show="showResponsePage"  @responseMsg="responseMsg"  @cancelRes="cancelRes"/>
 
         <footer>
             <div><el-button type="danger" round  @click="throwHandle">扔回海里</el-button></div>
@@ -35,15 +39,17 @@ import store from '@/store';
 import Loading from '@/components/loading';
 import Identicon from 'identicon.js';
 import crypto from 'crypto';
+import ResponsePage from '@/components/responsePage';
 
 export default {
     data(){
         return{
             bottle:{},
-            loading:false
+            loading:false,
+            showResponsePage:false,
         }
     },
-    components:{Loading},
+    components:{Loading,ResponsePage},
     created(){
         this.loading = true;
         let bid = this.$route.query.bid;
@@ -54,39 +60,57 @@ export default {
         },bid)
     },
     computed:{
-    bottleDate(){
-        return this.bottle;
-    },
-    messages(){
-        var messages = this.bottle.message;
-        if(messages){
-            var msgArr = messages.split("%startid%");
-            var newArr = [];
-            console.log('newArr:::::::',newArr)
-            for(var i = 1;i < msgArr.length;i++){
-                var marr = msgArr[i].split("%startmsg%");
+        bottleDate(){
+            return this.bottle;
+        },
+        messages(){
+            var messages = this.bottle.message;
+            if(messages){
+                var msgArr = messages.split("%startid%");
+                var newArr = [];
+                console.log('newArr:::::::',newArr)
+                for(var i = 1;i < msgArr.length;i++){
+                    var marr = msgArr[i].split("%startmsg%");
 
-                let hash = crypto.createHash('md5')
-                hash.update(marr[0]); // 传入用户名
-                let imgData = new Identicon(hash.digest('hex')).toString()
-                var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
-                var mobj = {
-                        from:marr[0],
-                        msg:marr[1],
-                        imgUrl:imgUrl
-                    };
-                
-                newArr.push(mobj);
+                    let hash = crypto.createHash('md5')
+                    hash.update(marr[0]); // 传入用户名
+                    let imgData = new Identicon(hash.digest('hex')).toString()
+                    var imgUrl = 'data:image/png;base64,'+imgData // 这就是头像的base64码
+                    var mobj = {
+                            from:marr[0],
+                            msg:marr[1],
+                            imgUrl:imgUrl
+                        };
+                    
+                    newArr.push(mobj);
+                }
+
+                return newArr;
             }
-
-            return newArr;
+            
         }
-         
-    }
-},
+    },
     methods:{
         back(){
             history.back();
+        },
+        throwHandle(){
+            store.removeBottleFromStorage("bottles",this.bottle.id)
+            setTimeout( ()=>{
+                this.$router.push('/mine')
+            })
+        },
+         responseMsg(msg){
+           console.log('response---------------')
+           this.showResponsePage = false;
+           if(msg){
+               var bottleId = this.bottle.id;
+               store.responseMsg(msg,bottleId)
+           }
+           
+        },
+        cancelRes(){
+            this.showResponsePage = false;
         }
     }
 }
@@ -97,6 +121,7 @@ export default {
 .container{
     position: relative;
 }
+
 header{
     width: 10rem;
     height: 45px;
@@ -107,6 +132,7 @@ header{
     line-height: 45px;
     position: fixed;
     top: 0;
+    z-index: 9999;
 
 }
 
@@ -153,14 +179,13 @@ header button{
 
 .msg-item img{
     width: 30px;height: 30px;
-    /* border-radius: 15px; */
 }
 
 .msg-item .msg-addr{
     font-size: 12px;
     color: #999;
     overflow: hidden;
-    line-height: 30px;
+    line-height: 45px;
 }
 .msg-item .msg-addr div{
     float: left;
@@ -171,6 +196,7 @@ header button{
     font-size: 16px;
     color: #000;
     margin-top: 3px;
+    margin-left: 25px;
 }
 
 
@@ -191,7 +217,12 @@ footer div{
     flex: 1;
 }
 
-
+button{
+    color:#fff;
+}
+button:hover{
+    color: #fff;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s;
 }

@@ -1,16 +1,22 @@
 <template>
     <div class="mine">
         <header>
-            <el-button    type="text" size="small" round icon="el-icon-arrow-left" @click="back">返回</el-button>   <span>我的瓶子</span>
+            <router-link to="/index">
+                <el-button    type="text" size="small" round icon="el-icon-arrow-left">返回</el-button>
+            </router-link>
+               <span>我的瓶子</span>
         </header>
 
-        <div class="bottle-list">
+        <div class="warning"  v-if="warning">
+            <h1>您还没有捞起任何瓶子，快去捞一个吧</h1>
+        </div>
+        <div class="bottle-list" v-if="bottles">
 
-            <router-link :to="'/theBottle?bid='+bottle"  v-for="(bottle,i) in bottles"  :key="i">
-            <div class="bottle-item" >
-                <i class="iconfont icon-12"></i>
-                {{bottle}}  <i  style="float:right;margin-top:21px;margin-right:10px;"  class="el-icon-arrow-right"></i>
-            </div>
+            <router-link  class="bottle-item"  v-for="(bottle,i) in bottles"   :to="'/theBottle?bid='+bottle"   :key="i">
+         
+             <i class="iconfont icon-12"></i>
+            {{bottle}}  <i  style="float:right;margin-top:21px;margin-right:10px;"  class="el-icon-arrow-right"></i>
+
             </router-link>
 
         </div>
@@ -29,18 +35,20 @@ export default {
 
     data(){
         return{
-            bottles:[]
+            bottles:null,
+            warning:true
         }
     },
     mounted(){
         let bottles = store.getBottleFromStorage("bottles");
         console.log('========>',bottles);
-        this.bottles = bottles;
-    },
-    methods:{
-        back(){
-            history.back();
+        if(bottles && bottles.length > 0){
+            this.bottles = bottles;
+            this.warning = false;
+        }else{
+            this.warning = true;
         }
+        
     }
 }
 </script>
@@ -86,6 +94,7 @@ header button{
 }
 
 .bottle-list .bottle-item{
+    display: block;
     width: 9rem;
     height: 60px;
     margin: 0 auto;
@@ -97,6 +106,21 @@ header button{
     border-radius: 5px;
     border-bottom: solid 1px #eee;
     color: #999;
+}
+
+
+.warning{
+    text-align: center;
+    padding-top: 100px;
+    color: #666;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+button{
+    color:#fff;
+}
+button:hover{
+    color: #fff;
 }
 .bottle-list .bottle-item i{
     color:deepskyblue;

@@ -91,16 +91,16 @@ methods:{
 }
 
 .picked-container .cover{
-    width: 8rem;
+    width: 9rem;
     height: 11rem;
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-4rem,-6rem);
+    transform: translate(-4.5rem,-6rem);
 }
 
 .picked-container .panel{
-    width: 7.5rem;
+    width: 8rem;
     height: 10rem;
     background: #fff;
     border-radius: 5px;
