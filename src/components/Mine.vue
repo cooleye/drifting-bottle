@@ -12,8 +12,8 @@
         </div>
         <div class="bottle-list" v-if="bottles">
 
-            <router-link  class="bottle-item"  v-for="(bottle,i) in bottles"   :to="'/theBottle?bid='+bottle"   :key="i">
-         
+            <router-link  class="bottle-item"  v-for="(bottle,i) in bottles"   v-if="i!='length'" :to="'/theBottle?bid='+bottle"   :key="i">
+              
              <i class="iconfont icon-12"></i>
             {{bottle}}  <i  style="float:right;margin-top:21px;margin-right:10px;"  class="el-icon-arrow-right"></i>
 
@@ -30,7 +30,6 @@
 
 import store from '@/store';
 
-
 export default {
 
     data(){
@@ -41,8 +40,12 @@ export default {
     },
     mounted(){
         let bottles = store.getBottleFromStorage("bottles");
+       
+        // bottles = [].slice.call(bottles); 
         console.log('========>',bottles);
+
         if(bottles && bottles.length > 0){
+            
             this.bottles = bottles;
             this.warning = false;
         }else{

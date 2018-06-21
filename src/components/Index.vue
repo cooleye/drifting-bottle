@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         
-        <div class="audio" ref="audio">
-            <audio src="/static/pick.mp3" ref="pick"></audio>
-            <audio src="/static/throw.mp3" ref="throw"></audio>
+        <div class="audio" id="audio"  ref="audio">
+            <audio src="/static/pick.mp3" id="m_pick"></audio>
+            <audio src="/static/throw.mp3" ref="m_throw"></audio>
         </div>
 
         <!-- 微信端提示 -->
@@ -57,15 +57,17 @@ export default {
     name:"Index",
     components:{PickedBottle,SendBottle,Loading,ResponsePage},
     mounted(){
-        // console.log(this.$refs.audio)
+       
         var ua = window.navigator.userAgent.toLowerCase();
         if(ua.match(/MicroMessenger/i) == 'micromessenger'){
-　　　　    //微信走这个
+　　　　    //微信
             this.wxwarning = true;
 　　　　  }else{
-　　　　    //其他环境走这个
             this.wxwarning = false;
 　　　　 }
+
+        this.m_pick = this.$refs.audio;
+        console.log('------------------------>',this.m_pick)
     },
     watch:{
             // tipTimer(){
@@ -155,7 +157,7 @@ export default {
     width: 10rem;
     min-width: 320px;
     height: 100%;
-    background: url(../assets/stbg.png) no-repeat #f3d889;
+    background: url(../assets/stbgn.png) no-repeat #f3d889;
     background-size: 100% auto;
     position: relative;
     overflow: hidden;
