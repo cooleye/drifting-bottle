@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         
-        <div class="audio" id="audio"  ref="audio">
+        <!-- <div class="audio" id="audio"  ref="audio">
             <audio src="/static/pick.mp3" id="m_pick"></audio>
             <audio src="/static/throw.mp3" ref="m_throw"></audio>
-        </div>
+        </div> -->
 
         <!-- 微信端提示 -->
         <div class="wxwarning" v-if="wxwarning"></div>
@@ -66,7 +66,7 @@ export default {
             this.wxwarning = false;
 　　　　 }
 
-        this.m_pick = this.$refs.audio;
+        // this.m_pick = this.$refs.audio;
     },
     watch:{
             // tipTimer(){
