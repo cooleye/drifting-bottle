@@ -89,6 +89,7 @@ export default {
         pickBottle(){
             
             this.loading = true;
+            this.tip.show = false;
 
             this.tipTimer = setInterval( ()=>{
                                 this.time++
@@ -100,6 +101,8 @@ export default {
                     if(res.state == 'fail'){
                          this.loading = false;
                          this.tip.show = true;
+                         clearInterval(this.tipTimer);
+                         this.time = 0;
                          console.log('海里还没有瓶子,,,,,,,1')
                     }else{
                         this.bottle = res.bottle;

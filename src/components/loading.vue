@@ -41,6 +41,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.75);
     text-align: center;
     position: fixed;
+    top:0;
     z-index: 999;
 }
 .loader {

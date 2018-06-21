@@ -35,4 +35,8 @@ body{
    overflow: hidden;
 }
 
+
+.qrcode-container {
+  top:40%;
+}
 </style>

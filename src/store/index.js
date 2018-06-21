@@ -6,27 +6,29 @@ import Storage from './Storage';
 var Account = nebulas.Account,
 neb = new nebulas.Neb();
 
-neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
-// neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
+// neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));
 
 
 
 /**
  * 测试网：
  * hash: fc92369a3c064813d7f51a872ece779656248041f8a9ca8ae6a957569d4dc6d3
- * address: n21KyfrdveH2tnS4KoLz4hs8tqzwJ8vmtVT
+ 
+    n21KyfrdveH2tnS4KoLz4hs8tqzwJ8vmtVT
  * 
  * passphrase
  * 
  * 
  * 主网：
  * hash：4b756fbb1e88b33a8e5c20654e6c7e88be82e0af52a51bde23a5afef1eabd2b7
- * addredd：n1iCbATJzwujSxLAMYQ4gAvsHa7NtRcoA4E
+ 
+    n1iCbATJzwujSxLAMYQ4gAvsHa7NtRcoA4E
  */
-var dappAddress = 'n21KyfrdveH2tnS4KoLz4hs8tqzwJ8vmtVT';
+var dappAddress = 'n1iCbATJzwujSxLAMYQ4gAvsHa7NtRcoA4E';
 
-// var callbackUrl = NebPay.config.mainnetUrl;   //如果合约在主网,则使用这个
-var callbackUrl = NebPay.config.testnetUrl;  
+var callbackUrl = NebPay.config.mainnetUrl;   //如果合约在主网,则使用这个
+// var callbackUrl = NebPay.config.testnetUrl;  
 
 var nebPay = new NebPay();
   
@@ -177,7 +179,10 @@ function removeBottleFromStorage(k,v){
 
 function removeInstallNebulasWalletDiv(){
     var div = document.getElementsByClassName('install-background')[0];
-    div.parentNode.removeChild(div);
+    if(div){
+        div.parentNode.removeChild(div);
+    }
+   
 }
 
 export default{
