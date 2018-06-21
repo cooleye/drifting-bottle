@@ -9,9 +9,11 @@
         <!-- 微信端提示 -->
         <div class="wxwarning" v-if="wxwarning"></div>
 
+        <transition name="fade">
         <div class="tip" v-show="tip.show">
             {{tip.value}}
         </div>
+        </transition>
 
         <Loading    v-show="loading"/>
 
@@ -48,8 +50,8 @@ export default {
             tip:{
                 value:"捡到了一个贝壳，再试一下",
                 show:false,
-                time:0
             },
+            time:0,
             tipTimer:null,
             wxwarning:false
         }
@@ -69,40 +71,60 @@ export default {
         // this.m_pick = this.$refs.audio;
     },
     watch:{
-            // tipTimer(){
-            //     console.log(this.tipTimer)
-            //     if(this.tipTimer){
-            //         if(this.tip.time >=1){
-            //             this.tip.show = true;
-            //             clearInterval(this.tipTimer)
-            //             setTimeout( ()=>{
-            //                 this.tip.show = false;
-            //             },2000)
-            //             this.tip.time = 0;
-            //         }
-            //     }
+            time(){
+                if(this.tipTimer){
+                    if(this.time > 10){
+                        this.tip.show = true;
+                        clearInterval(this.tipTimer)
+                        setTimeout( ()=>{
+                            this.tip.show = false;
+                        },2000)
+                        this.time = 0;
+                    }
+                }
                 
-            // }
+            }
         },
     methods:{
         pickBottle(){
             
             this.loading = true;
 
-            // this.tipTimer = setInterval( ()=>{
-            //                     this.time++
-            //                 },1000)
+            this.tipTimer = setInterval( ()=>{
+                                this.time++
+                            },1000)
            
 
             store.pickBottle( res =>{
-                this.bottle = res.bottle;
-                if(this.bottle == null || res.size <=0){
-                    console.log('海里还没有瓶子,,,,,,,')
-                    this.loading = false;
+                if(res){
+                    if(res.state == 'fail'){
+                         this.loading = false;
+                         this.tip.show = true;
+                         console.log('海里还没有瓶子,,,,,,,1')
+                    }else{
+                        this.bottle = res.bottle;
+                        if(this.bottle == null || res.size <=0){
+                            console.log('海里还没有瓶子,,,,,,,2')
+                            this.loading = false;
+                            this.tip.show = false;
+                        }else{
+                            if(this.time < 10){
+                                clearInterval(this.tipTimer);
+                                this.time = 0;
+                                this.showPickedBottle = true;
+                                this.loading = false;
+                            }
+                            
+                        } 
+                    }
                 }else{
-                    this.showPickedBottle = true;
+                    console.log('海里还没有瓶子,,,,,,,3')
+                    this.tip.show = true;
                     this.loading = false;
-                } 
+                    clearInterval(this.tipTimer);
+                    this.time = 0;
+                }
+                
             });
         },
         
@@ -190,7 +212,6 @@ footer .f2 button{
 .wxwarning{
     width: 100%;
     height: 100%;
-    /* background-color: rgba(0, 0, 0, 0.75); */
     background: url(../assets/tip.png) no-repeat rgba(0, 0, 0, 0.75);
     background-size: 100%;
     text-align:center;
@@ -198,4 +219,12 @@ footer .f2 button{
     position: absolute;
     color: #fff;
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
 </style>
