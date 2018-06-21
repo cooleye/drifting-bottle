@@ -41,9 +41,6 @@ export default {
     mounted(){
         let bottles = store.getBottleFromStorage("bottles");
        
-        // bottles = [].slice.call(bottles); 
-        console.log('========>',bottles);
-
         if(bottles && bottles.length > 0){
             
             this.bottles = bottles;

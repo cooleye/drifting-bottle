@@ -29,12 +29,6 @@ export default {
         isshow(){
             return this.show
         }
-    },
-    watch:{
-        isshow(){
-            // console.log('********:',this.isshow)
-            // console.log(this.isshow)
-        }
     }
 }
 </script>

@@ -2,7 +2,7 @@
 //本地数据存储
 var Storage = {
     save(k,v){
-        console.log('---------save:',k,v);
+        // console.log('---------save:',k,v);
 
         if(window.localStorage.getItem(k)){
             var str = window.localStorage.getItem(k)
@@ -13,30 +13,11 @@ var Storage = {
                 json[v] = v;
                 json.length++;
             }
-            // if(json.size > 0){
-                
-               
-            // }
-            // if(json.length > 0){
-            //     for(var i = 0;i < json.length;i++){
-            //         if(json[i] == v){
-            //             break;
-            //         }else{
-            //             json.push(v);
-            //         }
-            //     }
-            // }else{
-            //     json.push(v);
-            // }
-            
-            console.log('1本地存储：',json)
+        
             window.localStorage.setItem(k,JSON.stringify(json));
         }else{
-            var arr = {length:0};
+            var arr = {length:1};
             arr[v] = v;
-
-
-            console.log('2本地存储：',arr)
             window.localStorage.setItem(k,JSON.stringify(arr));
         }  
     },
@@ -44,15 +25,10 @@ var Storage = {
         return JSON.parse(window.localStorage.getItem(k));
     },
     remove(k,v){
-        console.log(k,v)
+        // console.log(k,v)
         var str = window.localStorage.getItem(k)
         if(str){
             var json = JSON.parse(str);
-            // for(let i = 0; i < json.length;i++){
-            //     if(v == json[i]){
-            //         json.splice(i,1)
-            //     }
-            // }
             delete json[v];
             window.localStorage.setItem(k,JSON.stringify(json));
         }else{

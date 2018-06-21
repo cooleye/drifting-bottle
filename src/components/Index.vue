@@ -67,7 +67,6 @@ export default {
 　　　　 }
 
         this.m_pick = this.$refs.audio;
-        console.log('------------------------>',this.m_pick)
     },
     watch:{
             // tipTimer(){
@@ -111,11 +110,9 @@ export default {
             this.showSendBottle = true;
         },
         throwHandle(){
-            console.log('扔回海里。。。。')
             this.showPickedBottle = false;
         },
         responseHandle(){
-            console.log("回应他。。。。。")
             this.showPickedBottle = false;
             this.showResponsePage = true;
         },
@@ -129,7 +126,6 @@ export default {
         },
         sendMsg(msg){
             this.showSendBottle = false;
-            console.log('msg:',msg)
             if(msg){
                 store.sendMsg(msg);
             }

@@ -55,7 +55,6 @@ export default {
         let bid = this.$route.query.bid;
         store.pickBottle(res =>{
             this.bottle = res.bottle;
-            console.log(this.bottle)
             this.loading = false;
         },bid)
     },
@@ -117,7 +116,6 @@ export default {
             this.showResponsePage = false;
         },
         responseHandle(){
-            console.log('回应。。。。。')
             this.showResponsePage = true;
         }
     }

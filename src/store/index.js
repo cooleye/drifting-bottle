@@ -107,10 +107,10 @@ function responseMsg(msg,bottleId){
 function  cbSearch(resp,callback){
     var result = resp.result;
     var json = JSON.parse(result);
-    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
-    console.log(result)
+    // console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')  
+    // console.log(result)
     //保存在localStorage
-    console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
+    // console.log('>>>>>>>>>>>>>>>>>>>>查询返回结果>>>>>>>>>>>>>>>>>>>')
     callback(json)
     
 }
@@ -122,11 +122,11 @@ function funcIntervalQuery() {
     }
     nebPay.queryPayInfo(serialNumber,options)   //search transaction result from server (result upload to server by app)
         .then(function (resp) {
-            console.log(">>>>>>>>>>tx result: " + resp)   //resp is a JSON string
+            // console.log(">>>>>>>>>>tx result: " + resp)   //resp is a JSON string
             var respObject = JSON.parse(resp)
             if(respObject.code === 0){
                 clearInterval(intervalQuery);
-                console.log(`set value succeed!`);
+                // console.log(`set value succeed!`);
             }
         })
         .catch(function (err) {
@@ -136,13 +136,13 @@ function funcIntervalQuery() {
 
 
 function cbPush(resp) {
-    console.log(">>>>>>>>>> send of push: " + JSON.stringify(resp))
+    // console.log(">>>>>>>>>> send of push: " + JSON.stringify(resp))
     var respString = JSON.stringify(resp);
     if(respString.search("rejected by user") !== -1){
         clearInterval(intervalQuery)
         // alert(respString)
     }else if(respString.search("txhash") !== -1){
-        console.log("wait for tx result: " + resp.txhash)
+        // console.log("wait for tx result: " + resp.txhash)
     }
 }
 
