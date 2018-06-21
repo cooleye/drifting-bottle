@@ -76,6 +76,7 @@ export default {
                     if(this.time > 10){
                         this.tip.show = true;
                         clearInterval(this.tipTimer)
+                        this.loading = false;
                         setTimeout( ()=>{
                             this.tip.show = false;
                         },2000)
