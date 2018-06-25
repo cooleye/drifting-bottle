@@ -28,10 +28,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 
 # 预览图
-![](https://github.com/cooleye/drifting-bottle/blob/master/resource/1.jpeg)
+![](http://pauxas1e2.bkt.clouddn.com/drifft_1.jpeg)
 
-![](https://github.com/cooleye/drifting-bottle/blob/master/resource/2.jpeg)
+![](http://pauxas1e2.bkt.clouddn.com/drifft_2.jpeg)
 
-![](https://github.com/cooleye/drifting-bottle/blob/master/resource/3.jpeg)
+![](http://pauxas1e2.bkt.clouddn.com/drifft_3.jpeg)
 
-![](https://github.com/cooleye/drifting-bottle/blob/master/resource/4.jpeg)
+![](http://pauxas1e2.bkt.clouddn.com/drifft_4.jpeg)
