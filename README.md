@@ -25,3 +25,13 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+
+# 预览图
+![](https://github.com/cooleye/drifting-bottle/blob/master/resource/1.jpeg)
+
+![](https://github.com/cooleye/drifting-bottle/blob/master/resource/2.jpeg)
+
+![](https://github.com/cooleye/drifting-bottle/blob/master/resource/3.jpeg)
+
+![](https://github.com/cooleye/drifting-bottle/blob/master/resource/4.jpeg)
