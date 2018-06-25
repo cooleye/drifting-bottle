@@ -76,6 +76,9 @@ DriftingBottle.prototype = {
         this.bottles.set(bottleId, bottleItem);
         this.bottleIdMap.set(index, bottleId);
         this.size +=1;
+
+        //返回bottleId
+        //return bottleId;
     },
   
     responseBottle(message,bottleId){
